@@ -1,19 +1,45 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import useAuthStore from '../stores/authStore'
+import api from '../services/api'
 
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e) => {
+  const login = useAuthStore((state) => state.login)
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Login con:', email, password)
-    // conexion backend
+    setError('')
+    setLoading(true)
+
+    try {
+      const res = await api.post('/auth/login', { email, password })
+      login(res.data.token, res.data.empleado)
+      navigate('/pos')
+    } catch (err) {
+      if (err.response?.status === 401) {
+        setError('Credenciales incorrectas')
+      } else if (err.response?.status === 403) {
+        setError('No tienes acceso al portal POS')
+      } else {
+        setError('Error de conexión con el servidor')
+      }
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="login-container">
       <h1>POS Cosmos Tickets</h1>
       <p>Inicia sesión para acceder a la taquilla</p>
+
+      {error && <div className="error-message">{error}</div>}
 
       <form onSubmit={handleSubmit}>
         <div>
@@ -38,7 +64,9 @@ function Login() {
           />
         </div>
 
-        <button type="submit">Ingresar</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Ingresando...' : 'Ingresar'}
+        </button>
       </form>
     </div>
   )
