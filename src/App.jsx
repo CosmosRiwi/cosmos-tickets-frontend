@@ -1,11 +1,7 @@
+import AppRouter from './router/AppRouter'
+
 function App() {
-  return (
-    <div>
-      <h1>POS Tiquetes — Cosmos</h1>
-      <p>Portal de taquilla funcionando</p>
-      <p>prueba</p>
-    </div>
-  )
+  return <AppRouter />
 }
 
 export default App
