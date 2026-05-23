@@ -4,6 +4,8 @@ import Dashboard from '../pages/Dashboard'
 import ProtectedRoute from './ProtectedRoute'
 import Events from '../pages/Events'
 import Seats from '../pages/Seats'
+import Payment from '../pages/Payment'
+import Confirmed from '../pages/Confirmed'
 
 function AppRouter() {
   return (
@@ -26,6 +28,18 @@ function AppRouter() {
         <Route path="/pos/seats/:eventId" element={
           <ProtectedRoute>
             <Seats />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/pos/payment" element={
+          <ProtectedRoute>
+            <Payment />
+        </ProtectedRoute>
+        } />
+
+        <Route path="/pos/confirmed" element={
+          <ProtectedRoute>
+            <Confirmed />
           </ProtectedRoute>
         } />
 

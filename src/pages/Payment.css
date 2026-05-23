@@ -1,0 +1,151 @@
+.payment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.payment-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.payment-header p {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.payment-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.payment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-section h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.detail-section p {
+  font-size: 15px;
+}
+
+.detail-secondary {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.payment-seats-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.payment-seats-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.payment-methods {
+  display: flex;
+  gap: 12px;
+}
+
+.payment-option {
+  flex: 1;
+  cursor: pointer;
+}
+
+.payment-option input {
+  display: none;
+}
+
+.payment-option-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.15s ease;
+}
+
+.payment-option.selected .payment-option-content {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.payment-option-content:hover {
+  border-color: #94a3b8;
+}
+
+.payment-option-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.payment-option-desc {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Confirm panel */
+.payment-confirm {
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.payment-confirm h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.confirm-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.confirm-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 0;
+  margin-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+  margin-top: 16px;
+}
