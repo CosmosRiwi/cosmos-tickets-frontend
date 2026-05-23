@@ -118,6 +118,17 @@ function Dashboard() {
           </div>
         )}
       </main>
+
+
+            <button
+        className="btn btn-primary"
+        style={{ marginTop: '24px' }}
+        onClick={() => navigate('/pos/eventos', {
+          state: { cliente: { nombre: 'Cliente Prueba', email: 'cliente@test.com' } }
+        })}
+      >
+        Ir a eventos (dev)
+      </button>
     </div>
   )
 }

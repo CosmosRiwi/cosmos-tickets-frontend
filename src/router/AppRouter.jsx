@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from '../pages/Login'
 import Dashboard from '../pages/Dashboard'
 import ProtectedRoute from './ProtectedRoute'
+import Events from '../pages/Events'
 
 function AppRouter() {
   return (
@@ -15,6 +16,12 @@ function AppRouter() {
           </ProtectedRoute>
         } />
 
+        <Route path="/pos/eventos" element={
+          <ProtectedRoute>
+            <Events />
+          </ProtectedRoute>
+        } />
+
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
@@ -22,3 +29,4 @@ function AppRouter() {
 }
 
 export default AppRouter
+
