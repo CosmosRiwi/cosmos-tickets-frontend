@@ -3,6 +3,7 @@ import Login from '../pages/Login'
 import Dashboard from '../pages/Dashboard'
 import ProtectedRoute from './ProtectedRoute'
 import Events from '../pages/Events'
+import Seats from '../pages/Seats'
 
 function AppRouter() {
   return (
@@ -19,6 +20,12 @@ function AppRouter() {
         <Route path="/pos/eventos" element={
           <ProtectedRoute>
             <Events />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/pos/seats/:eventId" element={
+          <ProtectedRoute>
+            <Seats />
           </ProtectedRoute>
         } />
 
