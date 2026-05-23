@@ -1,0 +1,72 @@
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dashboard-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-right span {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.dashboard-main {
+  max-width: 600px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.dashboard-main h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.dashboard-main > p {
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.search-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-form .input {
+  flex: 1;
+}
+
+.client-card, .client-not-found {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.client-card h3 {
+  color: #16a34a;
+  font-size: 16px;
+}
+
+.client-not-found h3 {
+  color: #d97706;
+  font-size: 16px;
+}
+
+.client-card .btn, .client-not-found .btn {
+  margin-top: 12px;
+  align-self: flex-start;
+}

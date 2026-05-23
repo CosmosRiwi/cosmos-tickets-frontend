@@ -19,17 +19,22 @@ function Login() {
     setLoading(true)
 
     try {
-      const res = await api.post('/auth/login', { email, password })
-      login(res.data.token, res.data.empleado)
-      navigate('/pos')
-    } catch (err) {
-      if (err.response?.status === 401) {
-        setError('Credenciales incorrectas')
-      } else if (err.response?.status === 403) {
-        setError('No tienes acceso al portal POS')
+      // TODO: connect to real backend
+      // const res = await api.post('/auth/login', { email, password })
+      // login(res.data.token, res.data.empleado)
+
+      if (email === 'test@cosmos.com' && password === '1234') {
+        login('token-temporal-dev', {
+          nombre: 'Dev Cosmos',
+          rol: 'empleado',
+          permisos: ['tickets']
+        })
+        navigate('/pos')
       } else {
-        setError('Error de conexión con el servidor')
+        setError('Credenciales incorrectas')
       }
+    } catch (err) {
+      setError('Error de conexión con el servidor')
     } finally {
       setLoading(false)
     }
