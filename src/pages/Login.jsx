@@ -18,27 +18,26 @@ function Login() {
     setError('')
     setLoading(true)
 
-    try {
-      // TODO: connect to real backend
-      // const res = await api.post('/auth/login', { email, password })
-      // login(res.data.token, res.data.empleado)
+  try {
+const res = await api.post('/auth/login', { email, password })
 
-      if (email === 'test@cosmos.com' && password === '1234') {
-        login('token-temporal-dev', {
-          nombre: 'Dev Cosmos',
-          rol: 'empleado',
-          permisos: ['tickets']
-        })
-        navigate('/pos')
-      } else {
-        setError('Credenciales incorrectas')
-      }
-    } catch (err) {
+login(res.data.token, {
+  id: res.data.userId,
+  nombre: res.data.fullName,
+  userType: res.data.userType,
+})
+
+navigate('/pos')
+  } catch (err) {
+    if (err.response?.status === 401) {
+      setError('Credenciales incorrectas o sin acceso')
+    } else {
       setError('Error de conexión con el servidor')
-    } finally {
-      setLoading(false)
     }
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div className="login-container">

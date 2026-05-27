@@ -2,7 +2,7 @@ import axios from 'axios'
 import useAuthStore from '../stores/authStore'
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://localhost:5178/api/tickets',
 })
 
 // JWT a cada request
