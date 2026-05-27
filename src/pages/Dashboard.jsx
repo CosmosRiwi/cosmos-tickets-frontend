@@ -10,8 +10,7 @@ function Dashboard() {
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
-  const [cliente, setCliente] = useState(null)
-  const [noEncontrado, setNoEncontrado] = useState(false)
+  const [client, setClient] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -20,44 +19,29 @@ function Dashboard() {
     navigate('/login')
   }
 
-  const buscarCliente = async (e) => {
+  const searchClient = async (e) => {
     e.preventDefault()
     setError('')
-    setCliente(null)
-    setNoEncontrado(false)
+    setClient(null)
     setLoading(true)
 
     try {
-      const res = await api.get(`/pos/clientes?email=${email}`)
-      setCliente(res.data)
+      const res = await api.post('/customers/lookup', { email })
+      setClient({
+        id: res.data.id,
+        nombre: res.data.fullName,
+        email: res.data.email,
+        isNew: res.data.isNewAccount
+      })
     } catch (err) {
-      if (err.response?.status === 404) {
-        setNoEncontrado(true)
-      } else {
-        setError('Error al buscar el cliente')
-      }
+      setError('Error al buscar el cliente')
     } finally {
       setLoading(false)
     }
   }
 
-  const crearCliente = async () => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const res = await api.post('/pos/clientes', { email })
-      setCliente(res.data)
-      setNoEncontrado(false)
-    } catch (err) {
-      setError('Error al crear la cuenta del cliente')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const continuarVenta = () => {
-    navigate('/pos/eventos', { state: { cliente } })
+  const continueToEvents = () => {
+    navigate('/pos/eventos', { state: { cliente: client } })
   }
 
   return (
@@ -74,11 +58,11 @@ function Dashboard() {
 
       <main className="dashboard-main">
         <h2>Nueva venta</h2>
-        <p>Busca al cliente por correo electrónico para iniciar</p>
+        <p>Ingresa el correo del cliente para iniciar</p>
 
         {error && <div className="error-message">{error}</div>}
 
-        <form onSubmit={buscarCliente} className="search-form">
+        <form onSubmit={searchClient} className="search-form">
           <input
             type="email"
             className="input"
@@ -92,43 +76,22 @@ function Dashboard() {
           </button>
         </form>
 
-        {cliente && (
+        {client && (
           <div className="card client-card">
-            <h3>Cliente encontrado</h3>
-            <p><strong>Nombre:</strong> {cliente.nombre}</p>
-            <p><strong>Email:</strong> {cliente.email}</p>
-            <button className="btn btn-primary" onClick={continuarVenta}>
+            <h3>{client.isNew ? 'Cuenta creada automáticamente' : 'Cliente encontrado'}</h3>
+            <p><strong>Nombre:</strong> {client.nombre}</p>
+            <p><strong>Email:</strong> {client.email}</p>
+            {client.isNew && (
+              <p className="new-account-note">
+                Se creó una cuenta nueva. El cliente recibirá un correo para activarla.
+              </p>
+            )}
+            <button className="btn btn-primary" onClick={continueToEvents}>
               Continuar con la venta
             </button>
           </div>
         )}
-
-        {noEncontrado && (
-          <div className="card client-not-found">
-            <h3>Cliente no registrado</h3>
-            <p>No existe una cuenta con el correo <strong>{email}</strong></p>
-            <p>Se creará una cuenta automática para vincular la boleta</p>
-            <button
-              className="btn btn-primary"
-              onClick={crearCliente}
-              disabled={loading}
-            >
-              {loading ? 'Creando...' : 'Crear cuenta y continuar'}
-            </button>
-          </div>
-        )}
       </main>
-
-
-            <button
-        className="btn btn-primary"
-        style={{ marginTop: '24px' }}
-        onClick={() => navigate('/pos/eventos', {
-          state: { cliente: { nombre: 'Cliente Prueba', email: 'cliente@test.com' } }
-        })}
-      >
-        Ir a eventos (dev)
-      </button>
     </div>
   )
 }

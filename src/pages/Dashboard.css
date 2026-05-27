@@ -12,6 +12,8 @@
   font-weight: 700;
 }
 
+
+
 .header-right {
   display: flex;
   align-items: center;
@@ -69,4 +71,10 @@
 .client-card .btn, .client-not-found .btn {
   margin-top: 12px;
   align-self: flex-start;
+}
+
+.new-account-note {
+  color: #d97706;
+  font-size: 13px;
+  font-style: italic;
 }
