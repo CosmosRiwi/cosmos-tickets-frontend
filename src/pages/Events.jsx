@@ -1,145 +1,157 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import api from '../services/api'
-import './Events.css'
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../services/api';
+import './Events.css';
 
 function Eventos() {
-  const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const navigate = useNavigate()
-  const location = useLocation()
-  const client = location.state?.cliente
+  const navigate = useNavigate();
+  const location = useLocation();
+  const client = location.state?.cliente;
 
   useEffect(() => {
+    // Protección de ruta: Si un empleado entra aquí directo sin buscar cliente, lo devolvemos
     if (!client) {
-      navigate('/pos')
-      return
+      navigate('/pos');
+      return;
     }
-
-    loadEvents()
-  }, [])
+    loadEvents();
+  }, [client, navigate]);
 
   const loadEvents = async () => {
+    setLoading(true);
+    setError('');
+    
     try {
-      // TODO: connect to real backend
-      // const res = await api.get('/pos/eventos')
-      // setEvents(res.data)
-
-      // Temporary data for development
-      setEvents([
-        {
-          id: '1',
-          title: 'Romeo y Julieta',
-          description: 'Obra clásica de Shakespeare',
-          start_date: '2026-06-15T20:00:00',
-          base_price: 45000,
-          poster_url: null,
-          available_seats: 120
-        },
-        {
-          id: '2',
-          title: 'El Lago de los Cisnes',
-          description: 'Ballet clásico de Tchaikovsky',
-          start_date: '2026-06-22T19:00:00',
-          base_price: 60000,
-          poster_url: null,
-          available_seats: 85
-        },
-        {
-          id: '3',
-          title: 'Stand Up Comedy Night',
-          description: 'Noche de comedia con artistas locales',
-          start_date: '2026-06-28T21:00:00',
-          base_price: 30000,
-          poster_url: null,
-          available_seats: 0
-        }
-      ])
+      // Usamos la URL absoluta temporalmente para evitar el conflicto con el baseURL de Axios
+      // En el futuro, lo ideal es mover esto a una variable de entorno en Vite (.env)
+      const res = await api.get('http://localhost:5178/api/public/events');
+      
+      const activeEvents = res.data.filter(event => event.status === 'published');
+      setEvents(activeEvents);
     } catch (err) {
-      setError('Error al cargar los eventos')
+      console.error("Error al cargar eventos:", err);
+      setError('No pudimos conectar con el servidor para obtener los eventos.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const selectEvent = (event) => {
-    if (event.available_seats === 0) return
-
+    // Pasamos el cliente original Y el evento seleccionado a la vista de Sillas
     navigate(`/pos/seats/${event.id}`, {
-      state: { client, event }
-    })
-  }
+      state: { 
+        cliente: client, 
+        evento: event 
+      }
+    });
+  };
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString('es-CO', {
-      weekday: 'long',
-      year: 'numeric',
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    // Usamos Intl.DateTimeFormat para un formato robusto y estandarizado
+    return new Intl.DateTimeFormat('es-CO', {
+      weekday: 'short', 
+      day: 'numeric', 
       month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    }).format(date);
+  };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 0
-    }).format(price)
+  // Vista de Carga
+  if (loading) {
+    return (
+      <div className="events-page loading-container">
+        <div className="loading-spinner"></div>
+        <p>Cargando cartelera de eventos...</p>
+      </div>
+    );
   }
-
-  if (loading) return <div className="loading">Cargando eventos...</div>
 
   return (
     <div className="events-page">
       <header className="events-header">
-        <div>
-          <h1>Seleccionar evento</h1>
-          <p>Cliente: <strong>{client?.nombre}</strong> — {client?.email}</p>
+        <div className="header-info">
+          <h1>Seleccionar Evento</h1>
+          <p className="client-badge">
+            Comprador: <strong>{client?.nombre}</strong> <span>({client?.email})</span>
+          </p>
         </div>
         <button className="btn btn-outline" onClick={() => navigate('/pos')}>
-          Volver
+          ← Cambiar Cliente
         </button>
       </header>
 
-      {error && <div className="error-message">{error}</div>}
+      {/* Manejo de Errores con opción de reintento */}
+      {error && (
+        <div className="error-banner">
+          <p>{error}</p>
+          <button className="btn btn-retry" onClick={loadEvents}>
+            Reintentar
+          </button>
+        </div>
+      )}
+
+      {/* Estado Vacío: Cuando la API responde bien pero no hay eventos 'published' */}
+      {!error && events.length === 0 && (
+        <div className="empty-state">
+          <h3>No hay eventos disponibles</h3>
+          <p>Actualmente no tenemos eventos publicados para la venta en taquilla.</p>
+        </div>
+      )}
 
       <div className="events-grid">
         {events.map(event => (
           <div
             key={event.id}
-            className={`card event-card ${event.available_seats === 0 ? 'sold-out' : ''}`}
+            className="card event-card"
             onClick={() => selectEvent(event)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter') selectEvent(event); }}
           >
             <div className="event-poster">
-              {event.poster_url
-                ? <img src={event.poster_url} alt={event.title} />
-                : <div className="poster-placeholder">{event.title[0]}</div>
+              {event.posterUrl 
+                ? <img src={event.posterUrl} alt={`Póster de ${event.name}`} loading="lazy" />
+                : <div className="poster-placeholder">
+                    <span>{event.name.charAt(0).toUpperCase()}</span>
+                  </div>
               }
             </div>
 
             <div className="event-info">
-              <h3>{event.title}</h3>
-              <p className="event-description">{event.description}</p>
-              <p className="event-date">{formatDate(event.start_date)}</p>
+              <div className="event-title-row">
+                <h3 title={event.name}>{event.name}</h3>
+                <span className="badge badge-primary">{event.eventTypeName}</span>
+              </div>
+              
+              <p className="event-description" title={event.description}>
+                {event.description || 'Sin descripción disponible'}
+              </p>
+              
+              <div className="event-details">
+                <p className="event-room">
+                  <span aria-hidden="true">📍</span> {event.roomName}
+                </p>
+                <p className="event-date">
+                  <span aria-hidden="true">📅</span> {formatDateTime(event.eventStartAt)}
+                </p>
+              </div>
+              
               <div className="event-footer">
-                <span className="event-price">{formatPrice(event.base_price)}</span>
-                <span className={`badge ${event.available_seats > 0 ? 'badge-success' : 'badge-danger'}`}>
-                  {event.available_seats > 0
-                    ? `${event.available_seats} disponibles`
-                    : 'Agotado'
-                  }
-                </span>
+                <span className="action-link">Seleccionar asientos →</span>
               </div>
             </div>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default Eventos
+export default Eventos;
