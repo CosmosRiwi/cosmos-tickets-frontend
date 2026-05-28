@@ -13,7 +13,6 @@ function Eventos() {
   const client = location.state?.cliente;
 
   useEffect(() => {
-    // Protección de ruta: Si un empleado entra aquí directo sin buscar cliente, lo devolvemos
     if (!client) {
       navigate('/pos');
       return;
@@ -26,8 +25,7 @@ function Eventos() {
     setError('');
     
     try {
-      // Usamos la URL absoluta temporalmente para evitar el conflicto con el baseURL de Axios
-      // En el futuro, lo ideal es mover esto a una variable de entorno en Vite (.env)
+
       const res = await api.get('http://localhost:5178/api/public/events');
       
       const activeEvents = res.data.filter(event => event.status === 'published');
@@ -41,18 +39,18 @@ function Eventos() {
   };
 
   const selectEvent = (event) => {
-    // Pasamos el cliente original Y el evento seleccionado a la vista de Sillas
+ 
     navigate(`/pos/seats/${event.id}`, {
       state: { 
-        cliente: client, 
-        evento: event 
+        client, 
+        event 
       }
     });
   };
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
-    // Usamos Intl.DateTimeFormat para un formato robusto y estandarizado
+  
     return new Intl.DateTimeFormat('es-CO', {
       weekday: 'short', 
       day: 'numeric', 
@@ -87,7 +85,6 @@ function Eventos() {
         </button>
       </header>
 
-      {/* Manejo de Errores con opción de reintento */}
       {error && (
         <div className="error-banner">
           <p>{error}</p>
@@ -97,7 +94,7 @@ function Eventos() {
         </div>
       )}
 
-      {/* Estado Vacío: Cuando la API responde bien pero no hay eventos 'published' */}
+
       {!error && events.length === 0 && (
         <div className="empty-state">
           <h3>No hay eventos disponibles</h3>

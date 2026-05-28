@@ -19,35 +19,14 @@ function Seats() {
       navigate('/pos')
       return
     }
-
     loadSeats()
   }, [])
 
   const loadSeats = async () => {
     try {
-      // TODO: connect to real backend
-      // const res = await api.get(`/pos/events/${event.id}/seats`)
-      // setSeats(res.data)
-
-      // Temporary data for development
-      const rows = ['A', 'B', 'C', 'D', 'E', 'F']
-      const seatsPerRow = 10
-      const tempSeats = []
-
-      rows.forEach(row => {
-        for (let i = 1; i <= seatsPerRow; i++) {
-          tempSeats.push({
-            id: `${row}${i}`,
-            row: row,
-            number: i.toString(),
-            zone: row <= 'B' ? 'VIP' : 'General',
-            price: row <= 'B' ? event.base_price * 1.5 : event.base_price,
-            status: Math.random() > 0.3 ? 'available' : 'occupied'
-          })
-        }
-      })
-
-      setSeats(tempSeats)
+   
+      const res = await api.get(`/events/${event.id}/seats`)
+      setSeats(res.data)
     } catch (err) {
       setError('Error al cargar los puestos')
     } finally {
@@ -56,21 +35,25 @@ function Seats() {
   }
 
   const toggleSeat = (seat) => {
-    if (seat.status === 'occupied') return
 
-    const isSelected = selectedSeats.find(s => s.id === seat.id)
+    if (!seat.isAvailable) return
+
+    const isSelected = selectedSeats.find(s => s.seatId === seat.seatId)
 
     if (isSelected) {
-      setSelectedSeats(selectedSeats.filter(s => s.id !== seat.id))
+      setSelectedSeats(selectedSeats.filter(s => s.seatId !== seat.seatId))
     } else {
       setSelectedSeats([...selectedSeats, seat])
     }
   }
 
   const getSeatClass = (seat) => {
-    if (seat.status === 'occupied') return 'seat occupied'
-    if (selectedSeats.find(s => s.id === seat.id)) return 'seat selected'
-    if (seat.zone === 'VIP') return 'seat available vip'
+ 
+    if (!seat.isAvailable) return 'seat occupied'
+
+    if (selectedSeats.find(s => s.seatId === seat.seatId)) return 'seat selected'
+  
+    if (seat.zoneName === 'VIP') return 'seat available vip'
     return 'seat available'
   }
 
@@ -93,9 +76,10 @@ function Seats() {
   }
 
   if (loading) return <div className="loading">Cargando puestos...</div>
+  if (error) return <div className="error-message">{error}</div>
 
-  // Group seats by row
-  const rows = [...new Set(seats.map(s => s.row))]
+
+  const rows = [...new Set(seats.map(s => s.rowLabel))]
 
   return (
     <div className="seats-page">
@@ -109,8 +93,6 @@ function Seats() {
         </button>
       </header>
 
-      {error && <div className="error-message">{error}</div>}
-
       <div className="seats-layout">
         <div className="seats-map">
           <div className="stage">ESCENARIO</div>
@@ -120,15 +102,19 @@ function Seats() {
               <div key={row} className="seat-row">
                 <span className="row-label">{row}</span>
                 {seats
-                  .filter(s => s.row === row)
+               
+                  .filter(s => s.rowLabel === row)
                   .map(seat => (
                     <div
-                      key={seat.id}
+                     
+                      key={seat.seatId}
                       className={getSeatClass(seat)}
                       onClick={() => toggleSeat(seat)}
-                      title={`${seat.row}${seat.number} — ${seat.zone} — ${formatPrice(seat.price)}`}
+                  
+                      title={`${seat.rowLabel}${seat.seatNumber} — ${seat.zoneName} — ${formatPrice(seat.price)}`}
                     >
-                      {seat.number}
+                   
+                      {seat.seatNumber}
                     </div>
                   ))
                 }
@@ -166,9 +152,12 @@ function Seats() {
             <>
               <ul className="selected-list">
                 {selectedSeats.map(seat => (
-                  <li key={seat.id}>
-                    <span>Fila {seat.row} — Puesto {seat.number}</span>
-                    <span className="seat-zone-badge">{seat.zone}</span>
+         
+                  <li key={seat.seatId}>
+             
+                    <span>Fila {seat.rowLabel} — Puesto {seat.seatNumber}</span>
+         
+                    <span className="seat-zone-badge">{seat.zoneName}</span>
                     <span>{formatPrice(seat.price)}</span>
                   </li>
                 ))}
