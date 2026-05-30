@@ -85,7 +85,7 @@ function Seats() {
     <div className="seats-page">
       <header className="seats-header">
         <div>
-          <h1>{event.title}</h1>
+          <h1>{event.name}</h1>
           <p>Cliente: <strong>{client?.nombre}</strong> — Selecciona los puestos</p>
         </div>
         <button className="btn btn-outline" onClick={() => navigate(-1)}>
