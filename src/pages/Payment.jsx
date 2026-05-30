@@ -41,37 +41,29 @@ function Payment() {
     setError('')
 
     try {
-      // TODO: connect to real backend
-      // const res = await api.post('/pos/orders', {
-      //   client_id: client.id,
-      //   event_id: event.id,
-      //   seat_ids: selectedSeats.map(s => s.id),
-      //   payment_method: paymentMethod,
-      //   channel: 'pos'
-      // })
-      // navigate('/pos/confirmed', { state: { order: res.data } })
+      // Paso 1: crear la orden — los tickets quedan 'pending' y reservan los puestos
+      const createRes = await api.post('/orders', {
+        customerId: client.id,
+        eventId: event.id,
+        seatIds: selectedSeats.map(s => s.id),
+      })
 
-      // Temporary: simulate successful purchase
-      const fakeOrder = {
-        id: crypto.randomUUID(),
-        order_number: `POS-${Date.now()}`,
-        client,
-        event,
-        seats: selectedSeats,
-        total: getTotal(),
-        payment_method: paymentMethod,
-        created_at: new Date().toISOString(),
-        tickets: selectedSeats.map(seat => ({
-          id: crypto.randomUUID(),
-          seat,
-          qr_code: `TICKET-${seat.id}-${Date.now()}`
-        }))
-      }
+      const orderId = createRes.data.id
 
-      navigate('/pos/confirmed', { state: { order: fakeOrder } })
+      // Paso 2: pagar — los tickets pasan a 'valid' y se generan los QR
+      const payRes = await api.post(`/orders/${orderId}/pay`, {
+        paymentMethod,
+      })
+
+      // Paso al confirmado el order real del backend + client y event que ya tengo en state
+      navigate('/pos/confirmed', {
+        state: { order: payRes.data, client, event },
+      })
     } catch (err) {
       if (err.response?.status === 409) {
         setError('Uno o más puestos ya fueron tomados. Vuelve a seleccionar.')
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message)
       } else {
         setError('Error al procesar la compra')
       }
@@ -103,9 +95,9 @@ function Payment() {
 
           <div className="card detail-section">
             <h3>Evento</h3>
-            <p>{event.title}</p>
+            <p>{event.name}</p>
             <p className="detail-secondary">
-              {new Date(event.start_date).toLocaleDateString('es-CO', {
+              {new Date(event.eventStartAt).toLocaleDateString('es-CO', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -120,9 +112,9 @@ function Payment() {
             <h3>Puestos seleccionados</h3>
             <ul className="payment-seats-list">
               {selectedSeats.map(seat => (
-                <li key={seat.id}>
-                  <span>Fila {seat.row} — Puesto {seat.number}</span>
-                  <span className="seat-zone-badge">{seat.zone}</span>
+                <li key={seat.seatId}>
+                  <span>Fila {seat.rowLabel} — Puesto {seat.seatNumber}</span>
+                  <span className="seat-zone-badge">{seat.zoneName}</span>
                   <span>{formatPrice(seat.price)}</span>
                 </li>
               ))}
@@ -171,7 +163,7 @@ function Payment() {
 
             <div className="confirm-line">
               <span>Evento</span>
-              <span>{event.title}</span>
+              <span>{event.name}</span>
             </div>
 
             <div className="confirm-line">
