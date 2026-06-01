@@ -92,7 +92,7 @@ function Eventos() {
       <main className="events-main">
         <div className="events-header-title">
           <h2 className="section-title">Funciones Disponibles</h2>
-          <p className="section-subtitle">Selecciona una obra para proceder a la asignación de butacas.</p>
+          <p className="section-subtitle">Selecciona una obra para proceder a la asignación de asientos</p>
         </div>
 
         {error && (
@@ -152,7 +152,7 @@ function Eventos() {
                 </div>
                 
                 <div className="playbill-footer">
-                  <span className="action-link">Seleccionar Butacas →</span>
+                  <span className="action-link">Seleccionar Asientos →</span>
                 </div>
               </div>
             </div>

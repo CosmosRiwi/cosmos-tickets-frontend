@@ -46,7 +46,7 @@ function Login() {
         <div className="login-header">
           <h1 className="brand-title">Playwright</h1>
           <h2 className="subtitle">Taquilla POS</h2>
-          <p>Inicia sesión para acceder a tu estación</p>
+          <p>Inicia sesión para acceder al portal taquilla</p>
         </div>
 
         {error && (
@@ -63,7 +63,7 @@ function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="empleado@playwright.com"
+              placeholder="empleado@cosmos.com"
               required
             />
           </div>

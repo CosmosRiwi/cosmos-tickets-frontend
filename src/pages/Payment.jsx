@@ -85,7 +85,7 @@ function Payment() {
         <div className="payment-dossier">
           
           <div className="dossier-card">
-            <h3 className="dossier-title">1. Datos del Espectador</h3>
+            <h3 className="dossier-title">1. Datos del Cliente</h3>
             <div className="dossier-content">
               <p className="primary-text">{client.nombre}</p>
               <p className="secondary-text">{client.email}</p>
@@ -110,7 +110,7 @@ function Payment() {
           </div>
 
           <div className="dossier-card">
-            <h3 className="dossier-title">3. Butacas Asignadas ({selectedSeats.length})</h3>
+            <h3 className="dossier-title">3. Asientos Asignados ({selectedSeats.length})</h3>
             <ul className="payment-seats-list">
               {selectedSeats.map(seat => (
                 <li key={seat.seatId} className="payment-seat-item">

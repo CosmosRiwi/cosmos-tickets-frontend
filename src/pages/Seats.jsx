@@ -100,7 +100,7 @@ function Seats() {
         <div className="topbar-left">
           <h1 className="event-title-display">{event.name}</h1>
           <p className="client-context">
-            Espectador: <strong>{client?.nombre}</strong> <span className="separator">|</span> Asignación de Butacas
+            Espectador: <strong>{client?.nombre}</strong> <span className="separator">|</span> Asignación de Asientos
           </p>
         </div>
         <button className="btn-outline-back" onClick={() => navigate(-1)}>
@@ -170,7 +170,7 @@ function Seats() {
             {selectedSeats.length === 0 ? (
               <div className="empty-selection">
                 <span className="empty-icon">🎟️</span>
-                <p>Aún no has seleccionado ninguna butaca para este espectador.</p>
+                <p>Aún no has seleccionado ningun asiento para este cliente</p>
               </div>
             ) : (
               <>

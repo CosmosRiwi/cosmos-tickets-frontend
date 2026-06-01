@@ -66,7 +66,7 @@ function Dashboard() {
         <div className="workspace-container">
           <div className="workspace-header">
             <h2 className="section-title">Nueva Venta</h2>
-            <p className="section-subtitle">Ingresa el correo electrónico del espectador para iniciar la orden.</p>
+            <p className="section-subtitle">Ingresa el correo electrónico del cliente para iniciar la orden.</p>
           </div>
 
           {error && (

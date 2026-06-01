@@ -66,7 +66,7 @@ function Confirmed() {
           <div className="confirmed-details-grid">
             
             <div className="confirmed-section">
-              <h3 className="section-label">Espectador</h3>
+              <h3 className="section-label">Cliente</h3>
               <p className="section-value">{client?.nombre}</p>
               <p className="section-subvalue">{client?.email}</p>
             </div>
@@ -78,7 +78,7 @@ function Confirmed() {
             </div>
 
             <div className="confirmed-section full-width">
-              <h3 className="section-label">Butacas Asignadas</h3>
+              <h3 className="section-label">Asientos Asignados</h3>
               <ul className="confirmed-tickets-list">
                 {order.tickets.map(ticket => (
                   <li key={ticket.ticketId} className="confirmed-ticket-item">
