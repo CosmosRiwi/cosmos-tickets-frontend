@@ -1,80 +1,356 @@
-.dashboard-header {
+/* Importamos las fuentes necesarias para el ecosistema */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-surface: #121414;
+  --bg-card: #1a1c1d;
+  --bg-input: #232627;
+  --primary-red: #D32F2F;
+  --primary-red-hover: #b71c1c;
+  --gold-accent: #D4AF37;
+  --gold-glow: rgba(212, 175, 55, 0.15);
+  --text-main: #f5f5f5;
+  --text-muted: #a0a0a0;
+  --border-color: #333839;
+  --success-green: #2e7d32;
+}
+
+/* Base del Dashboard */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background-color: var(--bg-surface);
+  background-image: radial-gradient(circle at 50% 10%, #1f2324 0%, var(--bg-surface) 60%);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+}
+
+/* Barra de Navegación / Header Superior */
+.dashboard-header {
+  background-color: rgba(26, 28, 29, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2.5rem;
+  display: flex;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: white;
-  border-bottom: 1px solid #e2e8f0;
+  align-items: center;
 }
 
-.dashboard-header h1 {
-  font-size: 18px;
+.brand-title-sm {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
   font-weight: 700;
+  color: var(--gold-accent);
+  margin: 0;
+  letter-spacing: 0.5px;
+  display: inline-block;
 }
 
-
+.brand-badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background-color: rgba(212, 175, 55, 0.1);
+  color: var(--gold-accent);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  margin-left: 0.8rem;
+  vertical-align: middle;
+}
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 1.5rem;
 }
 
-.header-right span {
-  color: #64748b;
-  font-size: 14px;
-}
-
-.dashboard-main {
-  max-width: 600px;
-  margin: 48px auto;
-  padding: 0 24px;
-}
-
-.dashboard-main h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.dashboard-main > p {
-  color: #64748b;
-  margin-bottom: 24px;
-}
-
-.search-form {
+.user-info {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  flex-direction: column;
+  text-align: right;
 }
 
-.search-form .input {
+.user-role {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Botón de Cerrar Sesión Estilo Minimalista/Teatral */
+.btn-outline-logout {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-logout:hover {
+  border-color: var(--primary-red);
+  color: #ff6b6b;
+  background-color: rgba(211, 47, 47, 0.05);
+}
+
+/* Contenedor Principal de Trabajo */
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3.5rem 1.5rem;
+}
+
+.workspace-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.workspace-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-main);
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Formulario de Búsqueda */
+.search-form-group {
+  display: flex;
+  gap: 0.75rem;
+  background-color: var(--bg-card);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  margin-bottom: 2rem;
+}
+
+.input-search-wrapper {
   flex: 1;
 }
 
-.client-card, .client-not-found {
+.search-input {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.85rem 1.2rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--gold-accent);
+  background-color: #1a1c1d;
+  box-shadow: 0 0 0 1px var(--gold-accent);
+}
+
+.btn-search {
+  background-color: #2a2e30;
+  color: var(--text-main);
+  border: 1px solid #3e4446;
+  padding: 0 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-search:hover:not(:disabled) {
+  background-color: var(--gold-accent);
+  color: #121414;
+  border-color: var(--gold-accent);
+}
+
+.btn-search:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Tarjeta del Resultado de Cliente */
+.client-result-card {
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Variante si es cliente encontrado vs nuevo */
+.client-result-card.is-found-account {
+  border-left: 4px solid var(--gold-accent);
+  box-shadow: 0 15px 35px var(--gold-glow);
+}
+
+.client-result-card.is-new-account {
+  border-left: 4px solid #cc832c;
+}
+
+.card-status-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.is-found-account .status-indicator {
+  background-color: var(--gold-accent);
+  box-shadow: 0 0 8px var(--gold-accent);
+}
+
+.is-new-account .status-indicator {
+  background-color: #cc832c;
+  box-shadow: 0 0 8px #cc832c;
+}
+
+.card-status-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.is-found-account h3 { color: var(--gold-accent); }
+.is-new-account h3 { color: #e59d44; }
+
+/* Tabla o listado interno de detalles */
+.client-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.client-card h3 {
-  color: #16a34a;
-  font-size: 16px;
+.detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
-.client-not-found h3 {
-  color: #d97706;
-  font-size: 16px;
+.detail-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.client-card .btn, .client-not-found .btn {
-  margin-top: 12px;
-  align-self: flex-start;
+.detail-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.mail-highlight {
+  color: #e0e0e0;
+}
+
+/* Nota de Nueva Cuenta */
+.new-account-alert {
+  background-color: rgba(204, 131, 44, 0.08);
+  border: 1px dashed rgba(204, 131, 44, 0.25);
+  border-radius: 6px;
+  padding: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.alert-icon {
+  color: #cc832c;
+  font-size: 1.2rem;
+  line-height: 1;
 }
 
 .new-account-note {
-  color: #d97706;
-  font-size: 13px;
-  font-style: italic;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #dcb382;
+  line-height: 1.4;
+}
+
+/* Botón de acción definitivo (Crimson Red) */
+.btn-action-primary {
+  width: 100%;
+  background-color: var(--primary-red);
+  color: #ffffff;
+  border: none;
+  padding: 1.1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.btn-action-primary:hover {
+  background-color: var(--primary-red-hover);
+  box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+}
+
+.btn-action-primary:active {
+  transform: translateY(1px);
+}
+
+/* Mensajes de error */
+.dashboard-error-message {
+  background-color: rgba(211, 47, 47, 0.1);
+  border-left: 3px solid var(--primary-red);
+  color: #ff6b6b;
+  padding: 0.9rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

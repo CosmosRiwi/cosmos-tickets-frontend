@@ -1,208 +1,410 @@
-.confirmed-page {
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-surface: #121414;
+  --bg-card: #1a1c1d;
+  --primary-red: #D32F2F;
+  --primary-red-hover: #b71c1c;
+  --gold-accent: #D4AF37;
+  --text-main: #f5f5f5;
+  --text-muted: #a0a0a0;
+  --border-color: #333839;
+  --success-green: #D4AF37; /* Usaremos dorado para el éxito manteniendo la elegancia */
+}
+
+/* =========================================================
+   1. ESTILOS DE PANTALLA (INTERFAZ DE USUARIO)
+========================================================= */
+
+.confirmed-wrapper {
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 32px;
+  align-items: center;
+  background-color: var(--bg-surface);
+  background-image: radial-gradient(circle at center, #1a1c1d 0%, var(--bg-surface) 100%);
+  padding: 2rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-main);
 }
 
 .confirmed-card {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 40px;
-  max-width: 520px;
+  background-color: var(--bg-card);
   width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  border-top: 4px solid var(--success-green);
   text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.confirmed-icon {
-  width: 64px;
-  height: 64px;
-  background: #dcfce7;
-  color: #16a34a;
+/* Animación de entrada */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.success-icon-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem auto;
+  background-color: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--success-green);
   border-radius: 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0 auto 16px;
+  align-items: center;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
 }
 
-.confirmed-card h1 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 8px;
+.success-icon {
+  font-size: 2.5rem;
+  color: var(--success-green);
+}
+
+.success-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
 }
 
 .confirmed-subtitle {
-  color: #64748b;
-  font-size: 14px;
-  margin-bottom: 32px;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin: 0 0 2.5rem 0;
 }
 
-.confirmed-details {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.confirmed-section h3 {
-  font-size: 12px;
+.order-highlight {
+  color: var(--gold-accent);
   font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  letter-spacing: 1px;
 }
 
-.confirmed-section p {
-  font-size: 15px;
+/* Grilla de Detalles */
+.confirmed-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  text-align: left;
+  background-color: #121415;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 2.5rem;
 }
 
-.text-secondary {
-  color: #64748b;
-  font-size: 13px;
-}
-
-.confirmed-tickets {
-  list-style: none;
+.confirmed-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
-.confirmed-tickets li {
+.confirmed-section.full-width {
+  grid-column: 1 / -1;
+  border-top: 1px dashed var(--border-color);
+  border-bottom: 1px dashed var(--border-color);
+  padding: 1rem 0;
+  margin: 0.5rem 0;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin: 0 0 0.3rem 0;
+}
+
+.section-value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 0.2rem 0;
+}
+
+.section-subvalue {
+  font-size: 0.85rem;
+  color: #888;
+  margin: 0;
+}
+
+.capitalize-first {
+  text-transform: capitalize;
+}
+
+/* Lista de Tickets (Resumen Final) */
+.confirmed-tickets-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.8rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.confirmed-ticket-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1a1c1d;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+}
+
+.ticket-item-left {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 8px 12px;
-  background: #f8fafc;
-  border-radius: 8px;
-  font-size: 13px;
+  gap: 0.8rem;
 }
 
-.confirmed-total {
-  display: flex;
+.ticket-loc {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.ticket-zone-badge {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  background-color: #2a2e30;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+.ticket-zone-badge.is-vip {
+  color: var(--gold-accent);
+  background-color: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.ticket-price {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+}
+
+/* Total Section */
+.total-section {
+  grid-column: 1 / -1;
+  flex-direction: row;
   justify-content: space-between;
-  padding: 16px 0;
-  border-top: 1px solid #e2e8f0;
-  font-size: 20px;
+  align-items: center;
+  padding-top: 0.5rem;
+}
+
+.total-label {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+.total-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
   font-weight: 700;
+  color: var(--gold-accent);
 }
 
+/* Botones de Acción */
 .confirmed-actions {
   display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.confirmed-actions .btn {
+.btn-action-primary,
+.btn-action-secondary {
   flex: 1;
-  padding: 12px;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-primary {
+  background-color: var(--primary-red);
+  color: #fff;
+  border: none;
+}
+
+.btn-action-primary:hover {
+  background-color: var(--primary-red-hover);
+  transform: translateY(-1px);
+}
+
+.btn-action-secondary {
+  background-color: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+
+.btn-action-secondary:hover {
+  border-color: var(--gold-accent);
+  color: var(--gold-accent);
 }
 
 .confirmed-note {
-  color: #94a3b8;
-  font-size: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
 }
 
 
-.ticket-print {
+/* =========================================================
+   2. ESTILOS DE IMPRESIÓN (TICKET TÉRMICO)
+========================================================= */
+
+/* Ocultamos el ticket en la pantalla normal */
+.ticket-print-layout {
   display: none;
 }
 
+/* Media Query exclusiva para cuando el navegador abre el cuadro de imprimir */
 @media print {
+  
+  /* Reset general para impresión */
+  @page {
+    margin: 0; /* Sin márgenes del navegador para no cortar el ticket térmico */
+  }
+
+  body, html {
+    background-color: #fff !important;
+    color: #000 !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Ocultamos todo lo visual del sistema */
   .no-print {
     display: none !important;
   }
 
-  /* toda la boleta*/
-  .ticket-print {
-    display: block;
-    width: 48mm;        
+  /* Mostramos el layout del recibo de papel */
+  .ticket-print-layout {
+    display: block !important;
+    width: 80mm; /* Ancho estándar de impresora térmica */
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0;
-    font-family: monospace;
+    padding: 5mm;
+    font-family: 'Courier New', Courier, monospace, sans-serif;
     color: #000;
     background: #fff;
+    font-size: 12px;
   }
 
-  .ticket-header {
+  /* Textos y Divisores de Impresión */
+  .print-header {
     text-align: center;
+    margin-bottom: 15px;
   }
-  .ticket-header h2 {
+
+  .print-brand {
+    font-family: serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    text-transform: uppercase;
+  }
+
+  .print-subtitle {
     margin: 0;
-    font-size: 16pt;
-    letter-spacing: 1px;
-  }
-  .ticket-order {
-    margin: 2px 0;
-    font-size: 8pt;
+    font-size: 12px;
   }
 
-  .ticket-divider {
+  .print-order {
+    margin: 10px 0 0 0;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .print-divider {
+    border-top: 1px solid #000;
+    margin: 10px 0;
+  }
+
+  .print-divider-dotted {
     border-top: 1px dashed #000;
-    margin: 6px 0;
-  }
-  .ticket-divider-dotted {
-    border-top: 1px dotted #000;
-    margin: 8px 0;
+    margin: 15px 0;
   }
 
-  .ticket-event {
+  /* Info del Evento */
+  .print-event-info {
     text-align: center;
+    margin: 10px 0;
   }
-  .ticket-event-name {
-    margin: 2px 0;
-    font-size: 11pt;
+
+  .print-event-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+  }
+
+  .print-event-date,
+  .print-client {
+    margin: 3px 0;
+  }
+
+  /* Detalle de Butacas y QR */
+  .print-single-ticket {
+    text-align: center;
+    page-break-inside: avoid; /* Evita que una boleta se corte por la mitad si el papel es continuo */
+  }
+
+  .print-qr-code {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+  }
+
+  .print-seat-details p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  .print-seat-loc {
     font-weight: bold;
   }
-  .ticket-event-date {
-    margin: 2px 0;
-    font-size: 8pt;
+
+  .print-seat-zone {
+    text-transform: uppercase;
   }
 
-  .ticket-seat-block {
-    text-align: center;
-    margin-bottom: 6px;
-  }
-  .ticket-seat-label {
-    margin: 4px 0 0;
-    font-size: 10pt;
-    font-weight: bold;
-  }
-  .ticket-seat-zone {
-    margin: 1px 0;
-    font-size: 8pt;
+  /* Totales */
+  .print-totals {
+    margin: 15px 0;
   }
 
-  .ticket-total-line {
+  .print-total-line {
     display: flex;
     justify-content: space-between;
-    font-size: 9pt;
-    margin: 2px 0;
+    margin: 5px 0;
   }
-  .ticket-total-big {
-    font-size: 11pt;
+
+  .print-total-big {
+    font-size: 16px;
     font-weight: bold;
-    margin-top: 4px;
+    margin-top: 10px;
   }
 
-  .ticket-footer {
+  /* Footer de impresión */
+  .print-footer {
     text-align: center;
-    font-size: 7pt;
-    margin-top: 6px;
-    padding-bottom: 5mm;
+    margin-top: 15px;
+    font-size: 10px;
   }
 
-  @page {
-    margin: 2mm;          
-    size: 58mm auto;
+  .print-footer p {
+    margin: 3px 0;
+  }
+
+  .print-thanks {
+    font-weight: bold;
+    margin-top: 10px !important;
+    font-size: 14px;
   }
 }

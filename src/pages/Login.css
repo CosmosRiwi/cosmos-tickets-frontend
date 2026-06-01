@@ -1,81 +1,163 @@
-.login-container {
+/* Importamos Playfair Display para los títulos e Inter para los textos (puedes cambiar Inter por la sans-serif de tu proyecto) */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+/* Variables de la Marca */
+:root {
+  --bg-surface: #121414;
+  --bg-card: #1a1c1d;
+  --primary-red: #D32F2F;
+  --primary-red-hover: #b71c1c;
+  --gold-accent: #D4AF37;
+  --text-main: #f5f5f5;
+  --text-muted: #a0a0a0;
+  --input-bg: #232627;
+  --border-color: #333839;
+}
+
+/* Contenedor Principal (El "Escenario") */
+.login-wrapper {
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  background-color: var(--bg-surface);
+  /* Sutil efecto de reflector en el centro */
+  background-image: radial-gradient(circle at center, #212526 0%, var(--bg-surface) 70%);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-main);
+  padding: 1rem;
 }
 
-.login-container h1 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 8px;
-}
-
-.login-container p {
-  color: #64748b;
-  margin-bottom: 32px;
-}
-
-.login-container form {
+/* Tarjeta del Login */
+.login-card {
   width: 100%;
-  max-width: 400px;
-  background: white;
-  padding: 32px;
+  max-width: 420px;
+  background-color: var(--bg-card);
+  padding: 3rem 2.5rem;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  /* Acento dorado superior que evoca un telón/elegancia */
+  border-top: 4px solid var(--gold-accent);
+}
+
+/* Cabecera */
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold-accent);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-main);
+  margin: 0.5rem 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.login-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Formulario */
+.login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.5rem;
 }
 
-.login-container label {
-  display: block;
-  font-size: 14px;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
   font-weight: 500;
-  color: #374151;
-  margin-bottom: 6px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.login-container input {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  color: #0f172a;
-  transition: border-color 0.15s ease;
-}
-
-.login-container input:focus {
+.form-group input {
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.9rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px #dbeafe;
 }
 
-.login-container button {
-  width: 100%;
-  padding: 12px;
-  background: #2563eb;
-  color: white;
+.form-group input::placeholder {
+  color: #555;
+}
+
+/* Interacción de los inputs: Aquí usamos el acento dorado */
+.form-group input:focus {
+  border-color: var(--gold-accent);
+  box-shadow: 0 0 0 1px var(--gold-accent);
+  background-color: #1a1c1d;
+}
+
+/* Botón de Acción Principal (Crimson Red) */
+.btn-primary {
+  background-color: var(--primary-red);
+  color: #ffffff;
   border: none;
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-size: 15px;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  margin-top: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.login-container button:hover:not(:disabled) {
-  background: #1d4ed8;
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-red-hover);
 }
 
-.login-container button:disabled {
-  opacity: 0.5;
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  background-color: #5a2222;
+  color: #a0a0a0;
   cursor: not-allowed;
+}
+
+/* Mensajes de Error */
+.error-message {
+  background-color: rgba(211, 47, 47, 0.1);
+  border-left: 3px solid var(--primary-red);
+  color: #ff6b6b;
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-icon {
+  font-size: 1.1rem;
 }

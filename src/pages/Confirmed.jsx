@@ -37,7 +37,7 @@ function Confirmed() {
 
   const paymentLabel = (method) => {
     if (method === 'cash') return 'Efectivo'
-    if (method === 'card') return 'Tarjeta'
+    if (method === 'card') return 'Datáfono'
     return method || '—'
   }
 
@@ -51,118 +51,132 @@ function Confirmed() {
 
   return (
     <>
-      {/* pantana*/}
-      <div className="confirmed-page no-print">
+      {/* ===== VISTA DE PANTALLA (No se imprime) ===== */}
+      <div className="confirmed-wrapper no-print">
         <div className="confirmed-card">
-          <div className="confirmed-icon">✓</div>
-          <h1>¡Compra exitosa!</h1>
+          <div className="success-icon-container">
+            <span className="success-icon">✓</span>
+          </div>
+          
+          <h1 className="success-title">¡Compra Exitosa!</h1>
           <p className="confirmed-subtitle">
-            Orden <strong>{order.orderNumber}</strong> procesada correctamente
+            Orden <strong className="order-highlight">#{order.orderNumber}</strong> procesada correctamente
           </p>
 
-          <div className="confirmed-details">
+          <div className="confirmed-details-grid">
+            
             <div className="confirmed-section">
-              <h3>Cliente</h3>
-              <p>{client?.nombre}</p>
-              <p className="text-secondary">{client?.email}</p>
+              <h3 className="section-label">Espectador</h3>
+              <p className="section-value">{client?.nombre}</p>
+              <p className="section-subvalue">{client?.email}</p>
             </div>
 
             <div className="confirmed-section">
-              <h3>Evento</h3>
-              <p>{event?.name}</p>
-              <p className="text-secondary">{formatDate(event?.eventStartAt)}</p>
+              <h3 className="section-label">Función</h3>
+              <p className="section-value">{event?.name}</p>
+              <p className="section-subvalue capitalize-first">{formatDate(event?.eventStartAt)}</p>
             </div>
 
-            <div className="confirmed-section">
-              <h3>Boletas</h3>
-              <ul className="confirmed-tickets">
+            <div className="confirmed-section full-width">
+              <h3 className="section-label">Butacas Asignadas</h3>
+              <ul className="confirmed-tickets-list">
                 {order.tickets.map(ticket => (
-                  <li key={ticket.ticketId}>
-                    <span>Fila {ticket.seatRow} — Puesto {ticket.seatNumber}</span>
-                    <span className="seat-zone-badge">{ticket.zoneName}</span>
-                    <span>{formatPrice(ticket.pricePaid)}</span>
+                  <li key={ticket.ticketId} className="confirmed-ticket-item">
+                    <div className="ticket-item-left">
+                      <span className="ticket-loc">Fila {ticket.seatRow} — Puesto {ticket.seatNumber}</span>
+                      <span className={`ticket-zone-badge ${ticket.zoneName === 'VIP' ? 'is-vip' : ''}`}>
+                        {ticket.zoneName}
+                      </span>
+                    </div>
+                    <span className="ticket-price">{formatPrice(ticket.pricePaid)}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div className="confirmed-section">
-              <h3>Pago</h3>
-              <p>{paymentLabel(order.paymentMethod)}</p>
+              <h3 className="section-label">Método de Pago</h3>
+              <p className="section-value">{paymentLabel(order.paymentMethod)}</p>
             </div>
 
-            <div className="confirmed-total">
-              <span>Total pagado</span>
-              <span>{formatPrice(order.total)}</span>
+            <div className="confirmed-section total-section">
+              <span className="total-label">Total Pagado</span>
+              <span className="total-value">{formatPrice(order.total)}</span>
             </div>
+
           </div>
 
           <div className="confirmed-actions">
-            <button className="btn btn-outline" onClick={printTicket}>
-              Imprimir boleta
+            <button className="btn-action-secondary" onClick={printTicket}>
+              🖨️ Imprimir Boletas
             </button>
-            <button className="btn btn-primary" onClick={newSale}>
-              Nueva venta
+            <button className="btn-action-primary" onClick={newSale}>
+              Iniciar Nueva Venta →
             </button>
           </div>
 
           <p className="confirmed-note">
-            El cliente recibirá su boleta digital por correo electrónico
+            El cliente recibirá su confirmación digital y códigos de acceso por correo electrónico.
           </p>
         </div>
       </div>
 
-
-        
-      {/* impersion de la boleta */}
-      <div className="ticket-print">
-        <div className="ticket-header">
-          <h2>PlayWright</h2>
-          <p className="ticket-order">Orden {order.orderNumber}</p>
+      {/* ===== VISTA DE IMPRESIÓN (Visible solo en Impresora Térmica) ===== */}
+      <div className="ticket-print-layout">
+        <div className="print-header">
+          <h2 className="print-brand">Playwright</h2>
+          <p className="print-subtitle">Taquilla Oficial</p>
+          <p className="print-order">ORDEN #{order.orderNumber}</p>
         </div>
 
-        <div className="ticket-divider"></div>
+        <div className="print-divider"></div>
 
-        <div className="ticket-event">
-          <p className="ticket-event-name">{event?.name}</p>
-          <p className="ticket-event-date">{formatDate(event?.eventStartAt)}</p>
+        <div className="print-event-info">
+          <h3 className="print-event-name">{event?.name}</h3>
+          <p className="print-event-date">{formatDate(event?.eventStartAt)}</p>
+          <p className="print-client">Cliente: {client?.nombre}</p>
         </div>
 
-        <div className="ticket-divider"></div>
+        <div className="print-divider"></div>
 
-        <div className="ticket-seats">
+        <div className="print-tickets-container">
           {order.tickets.map(ticket => (
-            <div key={ticket.ticketId} className="ticket-seat-block">
-              {ticket.qrToken
-                ? <QRCodeSVG value={ticket.qrToken} size={130} level="M" />
-                : <p>QR no disponible</p>}
-              <p className="ticket-seat-label">
-                Fila {ticket.seatRow} — Puesto {ticket.seatNumber}
-              </p>
-              <p className="ticket-seat-zone">
-                {ticket.zoneName} — {formatPrice(ticket.pricePaid)}
-              </p>
-              <div className="ticket-divider-dotted"></div>
+            <div key={ticket.ticketId} className="print-single-ticket">
+              <div className="print-qr-code">
+                {ticket.qrToken ? (
+                  <QRCodeSVG value={ticket.qrToken} size={160} level="M" />
+                ) : (
+                  <p className="no-qr">QR no disponible</p>
+                )}
+              </div>
+              <div className="print-seat-details">
+                <p className="print-seat-loc">FILA {ticket.seatRow} - PUESTO {ticket.seatNumber}</p>
+                <p className="print-seat-zone">{ticket.zoneName}</p>
+                <p className="print-seat-price">{formatPrice(ticket.pricePaid)}</p>
+              </div>
+              <div className="print-divider-dotted"></div>
             </div>
           ))}
         </div>
 
-        <div className="ticket-totals">
-          <div className="ticket-total-line">
-            <span>Método de pago</span>
+        <div className="print-totals">
+          <div className="print-total-line">
+            <span>Método:</span>
             <span>{paymentLabel(order.paymentMethod)}</span>
           </div>
-          <div className="ticket-total-line ticket-total-big">
-            <span>TOTAL</span>
+          <div className="print-total-line print-total-big">
+            <span>TOTAL PAGADO:</span>
             <span>{formatPrice(order.total)}</span>
           </div>
         </div>
 
-        <div className="ticket-divider"></div>
+        <div className="print-divider"></div>
 
-          <p className="ticket-footer">
-            Conserve esta boleta - Presente cada QR en el ingreso
-          </p>
+        <div className="print-footer">
+          <p>Conserve este recibo.</p>
+          <p>Presente cada código QR para el ingreso al teatro.</p>
+          <p className="print-thanks">¡Disfrute la función!</p>
+        </div>
       </div>
     </>
   )

@@ -45,52 +45,85 @@ function Dashboard() {
   }
 
   return (
-    <div className="dashboard">
+    <div className="dashboard-wrapper">
       <header className="dashboard-header">
-        <h1>POS Cosmos Tickets</h1>
+        <div className="header-brand">
+          <h1 className="brand-title-sm">Playwright</h1>
+          <span className="brand-badge">Taquilla Oficial</span>
+        </div>
         <div className="header-right">
-          <span>{empleado?.nombre || 'Empleado'}</span>
-          <button className="btn btn-outline" onClick={handleLogout}>
-            Cerrar sesión
+          <div className="user-info">
+            <span className="user-role">Operador:</span>
+            <span className="user-name">{empleado?.nombre || 'Empleado'}</span>
+          </div>
+          <button className="btn-outline-logout" onClick={handleLogout}>
+            Salir del Sistema
           </button>
         </div>
       </header>
 
       <main className="dashboard-main">
-        <h2>Nueva venta</h2>
-        <p>Ingresa el correo del cliente para iniciar</p>
-
-        {error && <div className="error-message">{error}</div>}
-
-        <form onSubmit={searchClient} className="search-form">
-          <input
-            type="email"
-            className="input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="correo@ejemplo.com"
-            required
-          />
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Buscando...' : 'Buscar'}
-          </button>
-        </form>
-
-        {client && (
-          <div className="card client-card">
-            <h3>{client.isNew ? 'Cuenta creada automáticamente' : 'Cliente encontrado'}</h3>
-            <p><strong>Nombre:</strong> {client.nombre}</p>
-            <p><strong>Email:</strong> {client.email}</p>
-            {client.isNew && (
-              <p className="new-account-note">
-                Se creó una cuenta nueva. El cliente recibirá un correo para activarla.
-              </p>
-            )}
-            <button className="btn btn-primary" onClick={continueToEvents}>
-              Continuar con la venta
-            </button>
+        <div className="workspace-container">
+          <div className="workspace-header">
+            <h2 className="section-title">Nueva Venta</h2>
+            <p className="section-subtitle">Ingresa el correo electrónico del espectador para iniciar la orden.</p>
           </div>
-        )}
+
+          {error && (
+            <div className="dashboard-error-message">
+              <span className="error-icon">⚠</span> {error}
+            </div>
+          )}
+
+          <form onSubmit={searchClient} className="search-form-group">
+            <div className="input-search-wrapper">
+              <input
+                type="email"
+                className="search-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="cliente@ejemplo.com"
+                required
+              />
+            </div>
+            <button type="submit" className="btn-search" disabled={loading}>
+              {loading ? 'Buscando...' : 'Buscar Cliente'}
+            </button>
+          </form>
+
+          {client && (
+            <div className={`client-result-card ${client.isNew ? 'is-new-account' : 'is-found-account'}`}>
+              <div className="card-status-header">
+                <span className="status-indicator"></span>
+                <h3>{client.isNew ? 'Cuenta creada automáticamente' : 'Espectador Encontrado'}</h3>
+              </div>
+              
+              <div className="client-details">
+                <div className="detail-row">
+                  <span className="detail-label">Nombre Completo</span>
+                  <span className="detail-value">{client.nombre}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="detail-label">Correo Electrónico</span>
+                  <span className="detail-value mail-highlight">{client.email}</span>
+                </div>
+              </div>
+
+              {client.isNew && (
+                <div className="new-account-alert">
+                  <span className="alert-icon">✉</span>
+                  <p className="new-account-note">
+                    Se ha generado un registro nuevo en el sistema. El cliente recibirá un correo de cortesía para activar su acceso digital.
+                  </p>
+                </div>
+              )}
+
+              <button className="btn-action-primary" onClick={continueToEvents}>
+                Continuar a Selección de Eventos →
+              </button>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   )
