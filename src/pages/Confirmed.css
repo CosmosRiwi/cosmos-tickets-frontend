@@ -111,3 +111,98 @@
   color: #94a3b8;
   font-size: 12px;
 }
+
+
+.ticket-print {
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  /* toda la boleta*/
+  .ticket-print {
+    display: block;
+    width: 48mm;        
+    margin: 0 auto;
+    padding: 0;
+    font-family: monospace;
+    color: #000;
+    background: #fff;
+  }
+
+  .ticket-header {
+    text-align: center;
+  }
+  .ticket-header h2 {
+    margin: 0;
+    font-size: 16pt;
+    letter-spacing: 1px;
+  }
+  .ticket-order {
+    margin: 2px 0;
+    font-size: 8pt;
+  }
+
+  .ticket-divider {
+    border-top: 1px dashed #000;
+    margin: 6px 0;
+  }
+  .ticket-divider-dotted {
+    border-top: 1px dotted #000;
+    margin: 8px 0;
+  }
+
+  .ticket-event {
+    text-align: center;
+  }
+  .ticket-event-name {
+    margin: 2px 0;
+    font-size: 11pt;
+    font-weight: bold;
+  }
+  .ticket-event-date {
+    margin: 2px 0;
+    font-size: 8pt;
+  }
+
+  .ticket-seat-block {
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .ticket-seat-label {
+    margin: 4px 0 0;
+    font-size: 10pt;
+    font-weight: bold;
+  }
+  .ticket-seat-zone {
+    margin: 1px 0;
+    font-size: 8pt;
+  }
+
+  .ticket-total-line {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    margin: 2px 0;
+  }
+  .ticket-total-big {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-top: 4px;
+  }
+
+  .ticket-footer {
+    text-align: center;
+    font-size: 7pt;
+    margin-top: 6px;
+    padding-bottom: 5mm;
+  }
+
+  @page {
+    margin: 2mm;          
+    size: 58mm auto;
+  }
+}

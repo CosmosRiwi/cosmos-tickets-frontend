@@ -31,7 +31,7 @@ function Payment() {
     }).format(price)
   }
 
-  const confirmPurchase = async () => {
+const confirmPurchase = async () => {
     if (!paymentMethod) {
       setError('Selecciona un método de pago')
       return
@@ -41,23 +41,16 @@ function Payment() {
     setError('')
 
     try {
-      // Paso 1: crear la orden — los tickets quedan 'pending' y reservan los puestos
-      const createRes = await api.post('/orders', {
+      // Un solo paso: crear = pagar. La orden nace pagada con tickets valid + QR.
+      const res = await api.post('/orders', {
         customerId: client.id,
         eventId: event.id,
-        seatIds: selectedSeats.map(s => s.id),
-      })
-
-      const orderId = createRes.data.id
-
-      // Paso 2: pagar — los tickets pasan a 'valid' y se generan los QR
-      const payRes = await api.post(`/orders/${orderId}/pay`, {
+        seatIds: selectedSeats.map(s => s.seatId),
         paymentMethod,
       })
 
-      // Paso al confirmado el order real del backend + client y event que ya tengo en state
       navigate('/pos/confirmed', {
-        state: { order: payRes.data, client, event },
+        state: { order: res.data, client, event },
       })
     } catch (err) {
       if (err.response?.status === 409) {
@@ -140,12 +133,12 @@ function Payment() {
               </label>
 
               <label
-                className={`payment-option ${paymentMethod === 'card_terminal' ? 'selected' : ''}`}
+                className={`payment-option ${paymentMethod === 'card' ? 'selected' : ''}`}
               >
                 <input
                   type="radio"
                   name="payment"
-                  value="card_terminal"
+                  value="card"
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
                 <div className="payment-option-content">
@@ -173,7 +166,7 @@ function Payment() {
 
             <div className="confirm-line">
               <span>Método</span>
-              <span>{paymentMethod === 'cash' ? 'Efectivo' : paymentMethod === 'card_terminal' ? 'Datáfono' : '—'}</span>
+              <span>{paymentMethod === 'cash' ? 'Efectivo' : paymentMethod === 'card' ? 'Datáfono' : '—'}</span>
             </div>
 
             <div className="confirm-total">
