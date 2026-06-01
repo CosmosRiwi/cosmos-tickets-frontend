@@ -2,9 +2,8 @@ import axios from 'axios'
 import useAuthStore from '../stores/authStore'
 
 const api = axios.create({
-  baseURL: 'http://localhost:5178/api/tickets',
+  baseURL: import.meta.env.VITE_API_URL,
 })
-
 // JWT a cada request
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token
