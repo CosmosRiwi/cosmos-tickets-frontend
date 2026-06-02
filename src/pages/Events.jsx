@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import api from '../services/api'; // (Mantenido comentado si usas axios directo como en tu código original)
+//import api from '../services/api'; // (Mantenido comentado si usas axios directo como en tu código original)
 import './Events.css';
 
 function Eventos() {
@@ -26,7 +26,7 @@ function Eventos() {
     setError('');
     
     try {
-      const res = await api.get('http://localhost:5178/api/public/events');
+      const res = await axios.get('/api/public/events');
       
       const activeEvents = res.data.filter(event => event.status === 'published');
       setEvents(activeEvents);
